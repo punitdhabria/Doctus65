@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="getMovies-sAPIFlow" doc:id="5be7934e-78d4-479b-9a80-b78efaf1fcf6" >
+		<http:listener doc:name="Listener" doc:id="5c979582-3773-4f00-b9c8-cb6df0c2cf09" config-ref="HTTP_Listener_config" path="/movies"/>
+		<set-variable value="#[message.attributes.queryParams.city]" doc:name="City" doc:id="716d376f-6ebd-4a50-ac06-c5c0002dcaa5" variableName="City"/>
+		<db:select doc:name="QueryMovies" doc:id="87e17d54-8ac1-4bb1-96d1-828964707304" config-ref="bms65ap1-DBConfig">
+			<db:sql ><![CDATA[SELECT * FROM MovieDetails where city=:city AND expiryflag= :flag]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{city: vars.City,
+ flag: "N"	
+}]]]></db:input-parameters>
+		</db:select>
+	</flow>
+</mule>
